@@ -46,8 +46,8 @@ public class TasksController {
 	}
 	
 	@DeleteMapping("/delete")
-	public ResponseEntity<Void> deleteById(@RequestParam int taskId){
+	public ResponseEntity<String> deleteById(@RequestParam int taskId){
 		taskService.deleteTasks(taskId);
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.ok(taskService.deleteTasks(taskId));
 	}
 }

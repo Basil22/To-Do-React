@@ -56,14 +56,11 @@ export const deleteTask = async (taskId) => {
   try {
     const response = await fetch(`${BASE_URL}delete?taskId=${taskId}`, {
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
     });
     if (!response.ok) {
       throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
-    return await response.json();
+    return await response.text();
   } catch (err) {
     console.error(err);
   }

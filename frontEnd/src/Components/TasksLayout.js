@@ -80,15 +80,28 @@ function TasksLayout() {
 
   const handleDeleteTasks = async (taskId) => {
     try {
-      const task = taskList.find((t) => t.taskId === taskId);
+      const taskInTaskList = taskList.find((t) => t.taskId === taskId);
+      const taskInCompletedTask = completedTask.find(
+        (t) => t.taskId === taskId
+      );
 
-      if (!task) {
+      if (!taskInTaskList && !taskInCompletedTask) {
+        console.log("Task not found in either list.");
         return;
       }
 
       await deleteTask(taskId);
-
-      setTaskList((prevState) => prevState.filter((t) => t.taskId !== taskId));
+      
+      if (taskInTaskList) {
+        setTaskList((prevState) =>
+          prevState.filter((t) => t.taskId !== taskId)
+        );
+      }
+      if (taskInCompletedTask) {
+        setCompletedTask((prevState) =>
+          prevState.filter((t) => t.taskId !== taskId)
+        );
+      }
     } catch (error) {
       console.error(error);
     }
@@ -114,7 +127,7 @@ function TasksLayout() {
       </Box>
       <Box>
         {taskList.map((task) => (
-          <Card sx={{ p: 1, mb: 2, maxWidth: 300 }}>
+          <Card key={task.taskId} sx={{ p: 1, mb: 2, maxWidth: 300 }}>
             <Box
               display="flex"
               justifyContent="space-between"
@@ -146,14 +159,20 @@ function TasksLayout() {
                 justifyContent="space-between"
                 alignItems="center"
               >
-                <p style={{ textDecoration: "line-through" }}>
+                <p key={task.taskId} style={{ textDecoration: "line-through" }}>
                   {task.taskName}
                 </p>
-                <Radio
-                  size="small"
-                  checked
-                  onClick={() => handleUncompletedTask(task.taskId)}
-                />
+                <Box display="flex" alignItems="center">
+                  <Radio
+                    size="small"
+                    checked
+                    onClick={() => handleUncompletedTask(task.taskId)}
+                  />
+                  <DeleteIcon
+                    sx={{ cursor: "pointer", color: "red" }}
+                    onClick={() => handleDeleteTasks(task.taskId)}
+                  />
+                </Box>
               </Box>
             </Card>
           ))}

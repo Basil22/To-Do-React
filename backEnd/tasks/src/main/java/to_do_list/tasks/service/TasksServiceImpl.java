@@ -26,8 +26,9 @@ public class TasksServiceImpl implements TasksService{
 	}
 
 	@Override
-	public void deleteTasks(int taskId) {
+	public String deleteTasks(int taskId) {
 		taskRepo.deleteById(taskId);
+		return "Task deleted";
 	}
 
 	@Override
