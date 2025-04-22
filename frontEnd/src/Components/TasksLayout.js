@@ -8,10 +8,14 @@ import {
   deleteTask,
 } from "../Services/tasksService";
 import DeleteIcon from "@mui/icons-material/Delete";
+import LightModeIcon from "@mui/icons-material/LightMode";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import { useTheme } from "../contexts/ThemeContext";
 
 function TasksLayout() {
   const [taskList, setTaskList] = useState([]);
   const [taskInput, setTaskInput] = useState("");
+  const { mode, toggleTheme } = useTheme();
 
   const [completedTask, setCompletedTask] = useState([]);
 
@@ -91,7 +95,7 @@ function TasksLayout() {
       }
 
       await deleteTask(taskId);
-      
+
       if (taskInTaskList) {
         setTaskList((prevState) =>
           prevState.filter((t) => t.taskId !== taskId)
@@ -109,8 +113,16 @@ function TasksLayout() {
 
   return (
     <Box sx={{ p: 3 }}>
-      <h1>My Tasks</h1>
-      <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        <h1 style={{ margin: 0 }}>My Tasks</h1>
+        <Button
+          onClick={toggleTheme}
+          sx={{ minWidth: 0, padding: 0 }} // To make button smaller
+        >
+          {mode === "light" ? <LightModeIcon /> : <DarkModeIcon />}
+        </Button>
+      </Box>
+      <Box sx={{ display: "flex", gap: 1, mb: 2, mt: 5 }}>
         <Input
           placeholder="Add Task"
           value={taskInput}
